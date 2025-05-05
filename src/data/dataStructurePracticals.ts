@@ -1,4 +1,3 @@
-
 export interface Practical {
   id: number;
   title: string;
@@ -6,6 +5,13 @@ export interface Practical {
   code: string;
   explanation?: string;
   output?: string;
+  lineByLineExplanation?: string[];
+  advantages?: string[];
+  applications?: string[];
+  vivaQuestions?: {
+    question: string;
+    answer: string;
+  }[];
 }
 
 export const dataStructurePracticals: Practical[] = [
@@ -55,7 +61,49 @@ int main() {
     output: `Original array: 
 64 34 25 12 22 11 90 
 Sorted array: 
-11 12 22 25 34 64 90`
+11 12 22 25 34 64 90`,
+    lineByLineExplanation: [
+      "#include <stdio.h> - Include standard input-output header file for functions like printf and scanf.",
+      "void bubbleSort(int arr[], int n) - Function declaration that takes an array and its size as parameters.",
+      "int i, j, temp - Declare loop counters 'i' and 'j', and a temporary variable for swapping.",
+      "for (i = 0; i < n-1; i++) - Outer loop runs n-1 times, where n is array size.",
+      "for (j = 0; j < n-i-1; j++) - Inner loop runs from 0 to n-i-1 as last i elements are already in place.",
+      "if (arr[j] > arr[j+1]) - Compare adjacent elements.",
+      "Swap logic using temp variable - Standard swapping of elements using a temporary variable.",
+      "void printArray(int arr[], int size) - Function to print all elements of the array.",
+      "main() function creates a sample array and demonstrates bubble sort on it."
+    ],
+    advantages: [
+      "Simple implementation with minimal code",
+      "In-place sorting (requires O(1) extra space)",
+      "Stable sorting algorithm (preserves order of equal elements)",
+      "Performs well on small data sets or nearly sorted arrays",
+      "Easy to detect if the array is already sorted"
+    ],
+    applications: [
+      "Educational tool to teach sorting concepts",
+      "Sorting small datasets where implementation simplicity matters",
+      "When memory usage is a constraint (due to in-place sorting)",
+      "When stability of sorting is required"
+    ],
+    vivaQuestions: [
+      {
+        question: "What is the time complexity of Bubble Sort?",
+        answer: "The time complexity of Bubble Sort is O(n²) in the worst and average cases, where n is the number of elements. In the best case (already sorted array), it can be O(n) with a modified implementation that uses a flag to detect if any swaps were made."
+      },
+      {
+        question: "How does Bubble Sort compare with other sorting algorithms?",
+        answer: "Bubble Sort is generally less efficient than algorithms like Quick Sort, Merge Sort, or Heap Sort which have O(n log n) time complexity. However, it's simpler to implement and can outperform more complex algorithms on small data sets or nearly sorted arrays."
+      },
+      {
+        question: "What is meant by a 'stable' sorting algorithm?",
+        answer: "A stable sorting algorithm preserves the relative order of equal elements in the sorted output as they appeared in the input. Bubble Sort is stable because it only swaps adjacent elements when they are in the wrong order."
+      },
+      {
+        question: "Can Bubble Sort be optimized?",
+        answer: "Yes, Bubble Sort can be optimized by: 1) Adding a flag to detect if any swaps were made in a pass, and terminating if none were made. 2) Tracking the last swap position to reduce the inner loop range. These optimizations can make the best-case complexity O(n)."
+      }
+    ]
   },
   {
     id: 2,
@@ -160,7 +208,85 @@ int main() {
 Element 25 inserted at position 2
 Array elements: 10 20 25 30 40 50 
 Element 30 at position 3 deleted successfully
-Array elements: 10 20 25 40 50`
+Array elements: 10 20 25 40 50`,
+    lineByLineExplanation: [
+      "#include <stdio.h> - Includes the standard input/output library for functions like printf.",
+      "void display(int arr[], int size) - Defines a function to print the elements of an array.",
+      "if (size == 0) - Checks if the array is empty.",
+      "printf(\"Array is empty\\n\"); - Prints a message if the array is empty.",
+      "printf(\"Array elements: \"); - Prints a label before displaying array elements.",
+      "for (int i = 0; i < size; i++) - Loops through each element of the array.",
+      "printf(\"%d \", arr[i]); - Prints the current element followed by a space.",
+      "printf(\"\\n\"); - Prints a newline character to end the output.",
+      "int insertElement(int arr[], int size, int element, int position, int capacity) - Defines a function to insert an element into the array at a given position.",
+      "if (size >= capacity) - Checks if the array is full.",
+      "printf(\"Cannot insert element, array is full\\n\"); - Prints an error message if the array is full.",
+      "return size; - Returns the current size of the array.",
+      "if (position < 0 || position > size) - Checks if the specified position is valid.",
+      "printf(\"Invalid position\\n\"); - Prints an error message if the position is invalid.",
+      "for (int i = size - 1; i >= position; i--) - Loops through the array from the end to the insertion point.",
+      "arr[i + 1] = arr[i]; - Shifts each element one position to the right.",
+      "arr[position] = element; - Inserts the new element at the specified position.",
+      "printf(\"Element %d inserted at position %d\\n\", element, position); - Prints a success message.",
+      "return size + 1; - Returns the new size of the array.",
+      "int deleteElement(int arr[], int size, int position) - Defines a function to delete an element from the array at a given position.",
+      "if (size <= 0) - Checks if the array is empty.",
+      "printf(\"Array is empty, cannot delete\\n\"); - Prints an error message if the array is empty.",
+      "return size; - Returns the current size of the array.",
+      "if (position < 0 || position >= size) - Checks if the specified position is valid.",
+      "printf(\"Invalid position\\n\"); - Prints an error message if the position is invalid.",
+      "int deletedElement = arr[position]; - Stores the element to be deleted.",
+      "for (int i = position; i < size - 1; i++) - Loops through the array from the deletion point to the end.",
+      "arr[i] = arr[i + 1]; - Shifts each element one position to the left.",
+      "printf(\"Element %d at position %d deleted successfully\\n\", deletedElement, position); - Prints a success message.",
+      "return size - 1; - Returns the new size of the array.",
+      "int main() - Main function where the program execution starts.",
+      "int arr[100], size = 0, capacity = 100; - Declares an array with a capacity of 100, initializes size to 0, and sets the capacity.",
+      "arr[0] = 10; arr[1] = 20; arr[2] = 30; arr[3] = 40; arr[4] = 50; - Initializes the array with some values.",
+      "size = 5; - Sets the initial size of the array.",
+      "printf(\"Initial \"); - Prints a label before displaying the initial array.",
+      "display(arr, size); - Calls the display function to print the initial array.",
+      "element = 25; - Sets the element to be inserted.",
+      "position = 2; - Sets the position where the element will be inserted.",
+      "size = insertElement(arr, size, element, position, capacity); - Calls the insertElement function to insert the element.",
+      "display(arr, size); - Calls the display function to print the array after insertion.",
+      "position = 3; - Sets the position from where the element will be deleted.",
+      "size = deleteElement(arr, size, position); - Calls the deleteElement function to delete the element.",
+      "display(arr, size); - Calls the display function to print the array after deletion.",
+      "return 0; - Returns 0 to indicate successful execution of the program."
+    ],
+    advantages: [
+      "Basic array operations are fundamental to many data structures and algorithms.",
+      "Arrays provide direct access to elements via their index, offering O(1) access time.",
+      "Arrays are memory efficient due to their contiguous memory allocation.",
+      "Insertion and deletion at the end of the array can be done in O(1) time if the array is not full.",
+      "Arrays are easy to use and implement, making them suitable for simple tasks."
+    ],
+    applications: [
+      "Storing a list of items, such as student records or product details.",
+      "Implementing stacks and queues.",
+      "Representing matrices and tables.",
+      "Performing lookups and searches.",
+      "Implementing sorting algorithms."
+    ],
+    vivaQuestions: [
+      {
+        question: "What is the difference between an array and a linked list?",
+        answer: "An array is a contiguous block of memory, while a linked list is a collection of nodes that are not necessarily contiguous. Arrays offer O(1) access time, while linked lists require O(n) time to access an element. Linked lists are more flexible in terms of insertion and deletion, while arrays require shifting elements."
+      },
+      {
+        question: "What is the time complexity of inserting an element at the beginning of an array?",
+        answer: "Inserting an element at the beginning of an array requires shifting all existing elements one position to the right, resulting in a time complexity of O(n), where n is the number of elements in the array."
+      },
+      {
+        question: "What are the advantages of using arrays over other data structures?",
+        answer: "Arrays offer direct access to elements via their index, providing O(1) access time. They are also memory efficient due to their contiguous memory allocation. Arrays are easy to use and implement, making them suitable for simple tasks."
+      },
+      {
+        question: "How can you improve the efficiency of inserting and deleting elements in an array?",
+        answer: "To improve the efficiency of inserting and deleting elements in an array, you can use techniques such as dynamic arrays, which automatically resize when needed. You can also use linked lists, which offer more flexible insertion and deletion operations."
+      }
+    ]
   },
   {
     id: 3,
@@ -264,7 +390,7 @@ Stack elements: 10 20 30
 30 popped from stack
 Stack elements: 10 20 
 40 pushed to stack
-Stack elements: 10 20 40`
+Stack elements: 10 20 40`,
   },
   {
     id: 4,
@@ -386,7 +512,7 @@ Queue elements: 10 20 30
 Queue elements: 20 30 
 40 enqueued to queue
 50 enqueued to queue
-Queue elements: 20 30 40 50`
+Queue elements: 20 30 40 50`,
   },
   {
     id: 5,
@@ -416,7 +542,7 @@ Move disk 1 from rod C to rod B
 Move disk 3 from rod A to rod C
 Move disk 1 from rod B to rod A
 Move disk 2 from rod B to rod C
-Move disk 1 from rod A to rod C`
+Move disk 1 from rod A to rod C`,
   },
   {
     id: 6,
@@ -469,7 +595,7 @@ int main() {
 }`,
     explanation: "Binary search is an efficient algorithm for finding an item from a sorted array. It works by repeatedly dividing the search interval in half. If the target value is less than the middle element, the search continues in the lower half; otherwise, in the upper half. This process continues until the value is found or the interval is empty.",
     output: `Element is present at index 3
-Element is not present in array`
+Element is not present in array`,
   },
   {
     id: 7,
@@ -503,7 +629,7 @@ int main() {
 }`,
     explanation: "This program demonstrates how to multiply two numbers using recursion instead of the multiplication operator (*). The idea is to add the first number to itself the second number of times. For example, 5 * 3 can be calculated as 5 + 5 + 5 = 15. The program handles negative numbers by using the property that a * (-b) = -(a * b).",
     output: `5 * 3 = 15
-7 * -2 = -14`
+7 * -2 = -14`,
   },
   {
     id: 8,
@@ -553,6 +679,6 @@ int main() {
 }`,
     explanation: "Insertion sort is a simple sorting algorithm that works by building a sorted array one element at a time. It takes elements from the unsorted part of the array and inserts them at the correct position in the sorted part of the array. This algorithm is efficient for small data sets or nearly sorted arrays.",
     output: `Original array: 12 11 13 5 6 
-Sorted array: 5 6 11 12 13`
+Sorted array: 5 6 11 12 13`,
   }
 ];
