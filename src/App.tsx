@@ -9,6 +9,8 @@ import DataStructure from "./pages/DataStructure";
 import PracticalDetails from "./pages/PracticalDetails";
 import NotFound from "./pages/NotFound";
 import Footer from "./components/Footer";
+import OS from "./pages/OS";
+import OSPracticalDetails from "./pages/OSPracticalDetails";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +26,8 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/data-structure" element={<DataStructure />} />
               <Route path="/data-structure/:id" element={<PracticalDetails />} />
+              <Route path="/os" element={<OS />} />
+              <Route path="/os/:id" element={<OSPracticalDetails />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

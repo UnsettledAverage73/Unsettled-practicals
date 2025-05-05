@@ -14,15 +14,15 @@ const Index = () => {
       status: "Available",
     },
     {
+      name: "OS (Operating Systems)",
+      path: "/os",
+      description: "Linux distributions, commands, shell scripting, process management, and CPU scheduling algorithms.",
+      status: "Available",
+    },
+    {
       name: "DCN (Data Communication and Networks)",
       path: "/dcn",
       description: "Network protocols, socket programming, and network configurations.",
-      status: "Coming Soon",
-    },
-    {
-      name: "OS (Operating Systems)",
-      path: "/os",
-      description: "Process scheduling, memory management, deadlocks, and more OS concepts.",
       status: "Coming Soon",
     },
     {

@@ -1,13 +1,14 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
 const Navbar = () => {
+  const location = useLocation();
   const subjects = [
     { name: "Data Structure", path: "/data-structure" },
-    { name: "DCN", path: "/dcn" },
     { name: "OS", path: "/os" },
+    { name: "DCN", path: "/dcn" },
     { name: "C Skill", path: "/c-skill" }
   ];
 
