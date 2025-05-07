@@ -29,7 +29,7 @@ const Index = () => {
       name: "C Skill",
       path: "/c-skill",
       description: "File handling, structures, unions, pointers, and advanced C programming techniques.",
-      status: "Coming Soon",
+      status: "Available",
     },
   ];
 
