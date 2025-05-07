@@ -39,7 +39,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
         </div>
       )}
       <pre className="p-4 overflow-x-auto">
-        <code className="text-sm">{code}</code>
+        <code className={language ? `language-${language}` : ''}>{code}</code>
       </pre>
       <Button 
         onClick={copyToClipboard} 
