@@ -1425,8 +1425,18 @@ const seconds = currentDate.getSeconds();
             const currentDate = new Date();
             
             // Display the default date format
-            document.getElementById('current-date').textContent = `Default Date Format: ${currentDate.toString()}`;
+            document.getElementById('current-date').textContent = `Default Date Format: ${currentDate.toString()};  // Display the default date format replace with given in explaination
             
+document.getElementById('date-components').textContent = `Date Components:
+Year: \${currentDate.getFullYear()},
+Month: \${currentDate.getMonth() + 1},
+Day: \${currentDate.getDate()},
+Day of week: \${getDayName(currentDate.getDay())}`;
+
+document.getElementById('time').textContent = `Current Time:
+\${padZero(currentDate.getHours())}:\${padZero(currentDate.getMinutes())}:\${padZero(currentDate.getSeconds())}`;
+
+document.getElementById('custom-format').textContent = `Custom Format: \${customFormat}`;
             // Display formatted date using locale
             document.getElementById('formatted-date').textContent = `Locale Date Format: ${currentDate.toLocaleString()}`;
             
@@ -1477,7 +1487,7 @@ const seconds = currentDate.getSeconds();
         document.getElementById('refresh-btn').addEventListener('click', updateDateDisplays);
     </script>
 </body>
-</html>`,
+</html>,
     conclusion: "This JavaScript program demonstrates how to use the Date object to obtain and display the current date and time in various formats. It shows different methods for formatting dates and times, which is essential for many web applications that need to present temporal data."
   },
   {
@@ -1487,7 +1497,7 @@ const seconds = currentDate.getSeconds();
     aim: "To develop a JavaScript program to design a simple calculator that performs addition, subtraction, multiplication, and division operations.",
     facilities: "Web browser, text editor, internet connection",
     scope: "Understanding JavaScript event handling, DOM manipulation, and arithmetic operations.",
-    code: `<!DOCTYPE html>
+    code: <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1817,7 +1827,7 @@ const seconds = currentDate.getSeconds();
         });
     </script>
 </body>
-</html>`,
+</html>,
     conclusion: "This JavaScript calculator demonstrates fundamental programming concepts like variables, functions, event handling, and conditional logic. It provides a practical example of how JavaScript can be used to create interactive web applications that process user input and perform calculations in real-time."
   },
   {
@@ -1827,7 +1837,7 @@ const seconds = currentDate.getSeconds();
     aim: "To develop a JavaScript program to create a responsive webpage and use local and session storage for data persistence.",
     facilities: "Web browser, text editor, internet connection",
     scope: "Understanding responsive web design and browser storage APIs.",
-    code: `<!DOCTYPE html>
+    code: <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -2467,7 +2477,7 @@ const seconds = currentDate.getSeconds();
                 const dateObj = new Date(task.date);
                 const formattedDate = `${dateObj.toLocaleDateString()} at ${dateObj.toLocaleTimeString()}`;
                 
-                li.innerHTML = `
+                li.innerHTML = 
                     <div class="task-title">${task.title}</div>
                     <div class="task-details">${task.details || 'No details provided'}</div>
                     <div>
@@ -2478,7 +2488,7 @@ const seconds = currentDate.getSeconds();
                         <button class="btn btn-success toggle-complete">${task.completed ? 'Reopen' : 'Complete'}</button>
                         <button class="btn btn-danger delete-task">Delete</button>
                     </div>
-                `;
+                ;
                 
                 if (task.completed) {
                     li.style.opacity = '0.7';
@@ -2582,8 +2592,7 @@ const seconds = currentDate.getSeconds();
         }
     </script>
 </body>
-</html>`,
+</html>,
     conclusion: "This project demonstrates the use of local and session storage in JavaScript for data persistence. It highlights the differences between the two storage types: local storage persists data even after the browser is closed, while session storage clears data when the browser session ends. The responsive design also showcases modern CSS techniques for creating interfaces that work well across different screen sizes."
   }
 ];
-
