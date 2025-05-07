@@ -11,6 +11,8 @@ import NotFound from "./pages/NotFound";
 import Footer from "./components/Footer";
 import OS from "./pages/OS";
 import OSPracticalDetails from "./pages/OSPracticalDetails";
+import CSkill from "./pages/CSkill";
+import CSkillPracticalDetails from "./pages/CSkillPracticalDetails";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +30,8 @@ const App = () => (
               <Route path="/data-structure/:id" element={<PracticalDetails />} />
               <Route path="/os" element={<OS />} />
               <Route path="/os/:id" element={<OSPracticalDetails />} />
+              <Route path="/c-skill" element={<CSkill />} />
+              <Route path="/c-skill/:id" element={<CSkillPracticalDetails />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
