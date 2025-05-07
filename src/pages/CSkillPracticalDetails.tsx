@@ -1,92 +1,19 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import CodeBlock from '@/components/CodeBlock';
 import Navbar from '@/components/Navbar';
 import { cSkillPracticals } from '@/data/cSkillPracticals';
-import { Textarea } from '@/components/ui/textarea';
-import { toast } from '@/components/ui/sonner';
 import Footer from '@/components/Footer';
 
-const OnlineCompiler = ({ code }: { code: string }) => {
-  const [editorCode, setEditorCode] = useState(code);
-  const [output, setOutput] = useState("");
-  const [isRunning, setIsRunning] = useState(false);
-
-  const runCode = () => {
-    setIsRunning(true);
-    setOutput("Running code...");
-    
-    try {
-      const iframeContainer = document.getElementById('iframe-container');
-      if (iframeContainer) {
-        iframeContainer.innerHTML = '';
-        const iframe = document.createElement('iframe');
-        iframe.style.width = '100%';
-        iframe.style.height = '300px';
-        iframe.style.border = '1px solid #ddd';
-        iframe.style.borderRadius = '4px';
-        
-        iframeContainer.appendChild(iframe);
-        
-        const iframeDoc = iframe.contentWindow?.document;
-        if (iframeDoc) {
-          iframeDoc.open();
-          iframeDoc.write(editorCode);
-          iframeDoc.close();
-          
-          setOutput("Code executed successfully!");
-          toast.success("Code executed successfully!");
-        }
-      }
-    } catch (error) {
-      setOutput(`Error: ${error instanceof Error ? error.message : String(error)}`);
-      toast.error("Error executing code");
-    } finally {
-      setIsRunning(false);
-    }
-  };
-
-  return (
-    <div className="space-y-4">
-      <div className="flex flex-col lg:flex-row gap-4">
-        <div className="flex-1">
-          <div className="mb-2 font-medium">Code Editor</div>
-          <Textarea 
-            value={editorCode} 
-            onChange={(e) => setEditorCode(e.target.value)}
-            className="min-h-[300px] font-mono text-sm p-4"
-          />
-          <div className="mt-4 flex justify-between gap-2">
-            <Button 
-              onClick={() => setEditorCode(code)}
-              variant="outline"
-            >
-              Reset Code
-            </Button>
-            <Button 
-              onClick={runCode}
-              disabled={isRunning}
-              className="bg-green-600 hover:bg-green-700"
-            >
-              {isRunning ? "Running..." : "Run Code"}
-            </Button>
-          </div>
-        </div>
-        
-        <div className="flex-1">
-          <div className="mb-2 font-medium">Output</div>
-          <div id="iframe-container" className="min-h-[300px] bg-gray-50 rounded border p-4">
-            {/* iframe will be inserted here */}
-          </div>
-          <div className="mt-2 text-sm text-gray-500">{output}</div>
-        </div>
-      </div>
-    </div>
-  );
-};
+// Import the tab content components
+import DescriptionTab from '@/components/practical-tabs/DescriptionTab';
+import TheoryTab from '@/components/practical-tabs/TheoryTab';
+import CodeTab from '@/components/practical-tabs/CodeTab';
+import TryItTab from '@/components/practical-tabs/TryItTab';
+import OutputTab from '@/components/practical-tabs/OutputTab';
+import ConclusionTab from '@/components/practical-tabs/ConclusionTab';
+import PracticalHeader from '@/components/PracticalHeader';
 
 const CSkillPracticalDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -116,16 +43,7 @@ const CSkillPracticalDetails = () => {
           &larr; Back to C Skill Practicals
         </Link>
         
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h1 className="text-3xl font-bold text-[#9b87f5] mb-4">
-            Practical {practical.id}: {practical.title}
-          </h1>
-          
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-2">Aim</h2>
-            <p className="text-gray-700">{practical.aim}</p>
-          </div>
-        </div>
+        <PracticalHeader id={practical.id} title={practical.title} aim={practical.aim} />
         
         <Tabs defaultValue="description" className="w-full">
           <TabsList className="mb-6">
@@ -137,68 +55,45 @@ const CSkillPracticalDetails = () => {
             {practical.conclusion && <TabsTrigger value="conclusion">Conclusion</TabsTrigger>}
           </TabsList>
           
-          <TabsContent value="description" className="bg-white rounded-lg shadow-md p-6 animate-fade-in">
-            <h2 className="text-xl font-semibold mb-4">Description</h2>
-            <p className="text-gray-700 mb-4">{practical.description}</p>
-            
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="font-semibold mb-2">Facilities Required</h3>
-              <p className="text-gray-600">{practical.facilities}</p>
-            </div>
-            
-            {practical.scope && (
-              <div className="bg-gray-50 p-4 rounded-lg mt-4">
-                <h3 className="font-semibold mb-2">Scope</h3>
-                <p className="text-gray-600">{practical.scope}</p>
-              </div>
-            )}
+          <TabsContent value="description">
+            <DescriptionTab 
+              description={practical.description}
+              facilities={practical.facilities}
+              scope={practical.scope}
+            />
           </TabsContent>
           
           {practical.theory && (
-            <TabsContent value="theory" className="bg-white rounded-lg shadow-md p-6 animate-fade-in">
-              <h2 className="text-xl font-semibold mb-4">Theory</h2>
-              <div className="text-gray-700 theory-content">
-                {practical.theory.split('\n\n').map((paragraph, i) => (
-                  <p key={i} className="mb-4">{paragraph}</p>
-                ))}
-              </div>
+            <TabsContent value="theory">
+              <TheoryTab theory={practical.theory} />
             </TabsContent>
           )}
           
           {practical.code && (
-            <TabsContent value="code" className="bg-white rounded-lg shadow-md p-6 animate-fade-in">
-              <h2 className="text-xl font-semibold mb-4">Code</h2>
-              <CodeBlock 
+            <TabsContent value="code">
+              <CodeTab 
                 code={practical.code} 
-                language={practical.id <= 6 ? "html" : "javascript"} 
-                title={`${practical.title} - Code Implementation`} 
+                language={practical.id <= 6 ? "html" : "javascript"}
+                title={practical.title}
               />
             </TabsContent>
           )}
           
           {practical.code && (
-            <TabsContent value="try" className="bg-white rounded-lg shadow-md p-6 animate-fade-in">
-              <h2 className="text-xl font-semibold mb-4">Try It Yourself</h2>
-              <p className="text-gray-700 mb-4">
-                You can modify and run the code below to see how it works.
-              </p>
-              <OnlineCompiler code={practical.code} />
+            <TabsContent value="try">
+              <TryItTab code={practical.code} />
             </TabsContent>
           )}
           
           {practical.output && (
-            <TabsContent value="output" className="bg-white rounded-lg shadow-md p-6 animate-fade-in">
-              <h2 className="text-xl font-semibold mb-4">Expected Output</h2>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <pre className="whitespace-pre-wrap text-sm">{practical.output}</pre>
-              </div>
+            <TabsContent value="output">
+              <OutputTab output={practical.output} />
             </TabsContent>
           )}
           
           {practical.conclusion && (
-            <TabsContent value="conclusion" className="bg-white rounded-lg shadow-md p-6 animate-fade-in">
-              <h2 className="text-xl font-semibold mb-4">Conclusion</h2>
-              <p className="text-gray-700">{practical.conclusion}</p>
+            <TabsContent value="conclusion">
+              <ConclusionTab conclusion={practical.conclusion} />
             </TabsContent>
           )}
         </Tabs>
