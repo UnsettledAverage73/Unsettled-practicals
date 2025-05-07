@@ -151,7 +151,7 @@ Key concepts in shell scripting:
    
 2. **Variables**:
    - Declaration: \`variable_name=value\` (no spaces around =)
-   - Access: \`$variable_name\` or \`${variable_name}\`
+   - Access: \`$variable_name\` or \
    - Special variables: \`$0\` (script name), \`$1, $2, ...\` (arguments), \`$#\` (number of arguments), \`$@\` (all arguments)
    
 3. **Control Structures**:
