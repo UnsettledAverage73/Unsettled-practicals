@@ -8,6 +8,7 @@ import Navbar from '@/components/Navbar';
 import { cSkillPracticals } from '@/data/cSkillPracticals';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/components/ui/sonner';
+import Footer from '@/components/Footer';
 
 const OnlineCompiler = ({ code }: { code: string }) => {
   const [editorCode, setEditorCode] = useState(code);
@@ -18,7 +19,6 @@ const OnlineCompiler = ({ code }: { code: string }) => {
     setIsRunning(true);
     setOutput("Running code...");
     
-    // For HTML/CSS/JS code, we can create an iframe and run the code inside it
     try {
       const iframeContainer = document.getElementById('iframe-container');
       if (iframeContainer) {
@@ -108,10 +108,10 @@ const CSkillPracticalDetails = () => {
   }
   
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
       
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-12 flex-1">
         <Link to="/c-skill" className="text-[#9b87f5] hover:underline mb-4 inline-block">
           &larr; Back to C Skill Practicals
         </Link>
@@ -203,6 +203,8 @@ const CSkillPracticalDetails = () => {
           )}
         </Tabs>
       </div>
+      
+      <Footer />
     </div>
   );
 };

@@ -38,18 +38,22 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           {title}
         </div>
       )}
-      <pre className="p-4 overflow-x-auto">
-        <code className={language ? `language-${language}` : ''}>{code}</code>
-      </pre>
-      <Button 
-        onClick={copyToClipboard} 
-        size="sm" 
-        variant="secondary" 
-        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-      >
-        {copied ? <CheckIcon size={16} /> : <ClipboardIcon size={16} />}
-        <span className="ml-2">{copied ? 'Copied!' : 'Copy'}</span>
-      </Button>
+      <div className="relative">
+        <pre className="p-4 overflow-x-auto">
+          <code className={language ? `language-${language}` : ''}>
+            {code}
+          </code>
+        </pre>
+        <Button 
+          onClick={copyToClipboard} 
+          size="sm" 
+          variant="secondary" 
+          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+        >
+          {copied ? <CheckIcon size={16} /> : <ClipboardIcon size={16} />}
+          <span className="ml-2">{copied ? 'Copied!' : 'Copy'}</span>
+        </Button>
+      </div>
     </div>
   );
 };
