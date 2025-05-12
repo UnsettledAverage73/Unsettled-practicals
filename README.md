@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 
-=======
 # Information Technology Practicals Repository
 
 This repository contains practical assignments, code samples, and resources for various computer science courses including Operating Systems, Computer Skills, Data Structures, and Theory of Computation.
