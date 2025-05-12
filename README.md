@@ -87,11 +87,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Contact
 
-For any questions or suggestions, please contact:
-- Email: your.email@example.com
-- GitHub: [Your GitHub Username](https://github.com/yourusername)
+For any questions or suggestions, please contact
+
 
 ---
 
-*This project was created as part of computer science laboratory coursework to help students learn practical implementations of theoretical concepts.*
->>>>>>> 4c80a51 (add README.md)
