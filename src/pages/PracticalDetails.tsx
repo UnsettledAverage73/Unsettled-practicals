@@ -10,6 +10,7 @@ import Navbar from '@/components/Navbar';
 import { cn } from '@/lib/utils';
 import { toast } from '@/components/ui/sonner';
 import GameComponent from '@/components/games/GameComponent';
+import InteractiveTab from '@/components/practical-tabs/InteractiveTab';
 
 const PracticalDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -85,6 +86,7 @@ const PracticalDetails = () => {
         <Tabs defaultValue="code" className="w-full">
           <TabsList className="grid w-full grid-cols-2 md:grid-cols-6 mb-6">
             <TabsTrigger value="code">💻 Code</TabsTrigger>
+            <TabsTrigger value="interactive">🚀 Try It</TabsTrigger>
             <TabsTrigger value="explanation">🧠 Explanation</TabsTrigger>
             <TabsTrigger value="advantages">✅ Advantages</TabsTrigger>
             <TabsTrigger value="applications">📌 Applications</TabsTrigger>
@@ -110,6 +112,18 @@ const PracticalDetails = () => {
                     </pre>
                   </div>
                 )}
+              </CardContent>
+            </TabsContent>
+            
+            <TabsContent value="interactive" className="mt-0">
+              <CardContent className="p-6 animate-fade-in">
+                <InteractiveTab
+                  code={practical.code}
+                  title={practical.title}
+                  testCases={[
+                    { input: "Sample input", expectedOutput: "Expected output" },
+                  ]}
+                />
               </CardContent>
             </TabsContent>
             
