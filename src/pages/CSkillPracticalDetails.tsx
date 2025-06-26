@@ -2,7 +2,7 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { toast } from '@/components/ui/sonner';
+import { toast } from '@/hooks/use-toast';
 import Navbar from '@/components/Navbar';
 import { cSkillPracticals } from '@/data/cSkillPracticals';
 import Footer from '@/components/Footer';
@@ -12,8 +12,7 @@ import GameComponent from '@/components/games/GameComponent';
 import DescriptionTab from '@/components/practical-tabs/DescriptionTab';
 import TheoryTab from '@/components/practical-tabs/TheoryTab';
 import CodeTab from '@/components/practical-tabs/CodeTab';
-import TryItTab from '@/components/practical-tabs/TryItTab';
-import OutputTab from '@/components/practical-tabs/OutputTab';
+import InteractiveTab from '@/components/practical-tabs/InteractiveTab';
 import ConclusionTab from '@/components/practical-tabs/ConclusionTab';
 import PracticalHeader from '@/components/PracticalHeader';
 
@@ -37,7 +36,251 @@ const CSkillPracticalDetails = () => {
   }
   
   const handleGameComplete = (score: number) => {
-    toast.success(`Game completed with score: ${score}!`);
+    toast({
+      title: "Game Completed!",
+      description: `Great job! You scored ${score} points.`,
+    });
+  };
+
+  // Generate sample code based on practical type
+  const getSampleCode = (practicalId: number) => {
+    switch (practicalId) {
+      case 1:
+        return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Development Fundamentals</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        .highlight { background-color: yellow; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Web Development!</h1>
+        <p>This demonstrates the fundamentals of <span class="highlight">HTML</span> and <span class="highlight">CSS</span>.</p>
+        <button onclick="showMessage()">Click me!</button>
+        <div id="message"></div>
+    </div>
+    
+    <script>
+        function showMessage() {
+            document.getElementById('message').innerHTML = '<p style="color: green; margin-top: 10px;">JavaScript is working! 🎉</p>';
+        }
+    </script>
+</body>
+</html>`;
+      case 7:
+        return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today's Date Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .date-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .date-display {
+            font-size: 18px;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f0f8ff;
+            border-left: 4px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="date-container">
+        <h1>Today's Date in Different Formats</h1>
+        <button onclick="displayDates()">Show Current Date</button>
+        <div id="dateOutput"></div>
+    </div>
+    
+    <script>
+        function displayDates() {
+            const now = new Date();
+            const output = document.getElementById('dateOutput');
+            
+            output.innerHTML = \`
+                <div class="date-display"><strong>Standard Format:</strong> \${now.toString()}</div>
+                <div class="date-display"><strong>Date Only:</strong> \${now.toDateString()}</div>
+                <div class="date-display"><strong>Time Only:</strong> \${now.toTimeString()}</div>
+                <div class="date-display"><strong>Locale Format:</strong> \${now.toLocaleString()}</div>
+                <div class="date-display"><strong>Custom Format:</strong> \${now.getDate()}/\${now.getMonth() + 1}/\${now.getFullYear()}</div>
+            \`;
+        }
+        
+        // Display dates automatically when page loads
+        displayDates();
+    </script>
+</body>
+</html>`;
+      case 8:
+        return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .calculator {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .display {
+            width: 100%;
+            height: 60px;
+            font-size: 24px;
+            text-align: right;
+            margin-bottom: 10px;
+            padding: 0 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        button {
+            height: 50px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        button:hover { background-color: #e9e9e9; }
+        .operator { background-color: #007bff; color: white; }
+        .equals { background-color: #28a745; color: white; }
+        .clear { background-color: #dc3545; color: white; }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" class="display" id="display" readonly>
+        <div class="buttons">
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button onclick="deleteLast()">⌫</button>
+            <button class="operator" onclick="appendToDisplay('/')">/</button>
+            <button class="operator" onclick="appendToDisplay('*')">*</button>
+            
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button class="operator" onclick="appendToDisplay('-')">-</button>
+            
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button class="operator" onclick="appendToDisplay('+')">+</button>
+            
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button class="equals" onclick="calculate()" rowspan="2">=</button>
+            
+            <button onclick="appendToDisplay('0')" colspan="2" style="grid-column: span 2;">0</button>
+            <button onclick="appendToDisplay('.')">.</button>
+        </div>
+    </div>
+    
+    <script>
+        function appendToDisplay(value) {
+            document.getElementById('display').value += value;
+        }
+        
+        function clearDisplay() {
+            document.getElementById('display').value = '';
+        }
+        
+        function deleteLast() {
+            const display = document.getElementById('display');
+            display.value = display.value.slice(0, -1);
+        }
+        
+        function calculate() {
+            const display = document.getElementById('display');
+            try {
+                display.value = eval(display.value);
+            } catch (error) {
+                display.value = 'Error';
+            }
+        }
+    </script>
+</body>
+</html>`;
+      default:
+        return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Code Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive Code Example</h1>
+        <p>Edit this code and see the changes live!</p>
+        <button onclick="alert('Hello from JavaScript!')">Click Me</button>
+    </div>
+</body>
+</html>`;
+    }
   };
   
   return (
@@ -56,7 +299,7 @@ const CSkillPracticalDetails = () => {
             <TabsTrigger value="description">Description</TabsTrigger>
             {practical.theory && <TabsTrigger value="theory">Theory</TabsTrigger>}
             {practical.code && <TabsTrigger value="code">Code</TabsTrigger>}
-            {practical.code && <TabsTrigger value="try">Try It</TabsTrigger>}
+            {practical.code && <TabsTrigger value="interactive">🚀 Try It Live</TabsTrigger>}
             <TabsTrigger value="game">🎮 Game</TabsTrigger>
             <TabsTrigger value="conclusion">Conclusion</TabsTrigger>
           </TabsList>
@@ -86,8 +329,11 @@ const CSkillPracticalDetails = () => {
           )}
           
           {practical.code && (
-            <TabsContent value="try">
-              <TryItTab code={practical.code} />
+            <TabsContent value="interactive">
+              <InteractiveTab 
+                code={getSampleCode(practical.id)}
+                title={practical.title}
+              />
             </TabsContent>
           )}
           
