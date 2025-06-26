@@ -1,6 +1,8 @@
+
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { toast } from '@/components/ui/sonner';
 import Navbar from '@/components/Navbar';
 import { cSkillPracticals } from '@/data/cSkillPracticals';
 import Footer from '@/components/Footer';
@@ -56,8 +58,7 @@ const CSkillPracticalDetails = () => {
             {practical.code && <TabsTrigger value="code">Code</TabsTrigger>}
             {practical.code && <TabsTrigger value="try">Try It</TabsTrigger>}
             <TabsTrigger value="game">🎮 Game</TabsTrigger>
-            {practical.output && <TabsTrigger value="output">Output</TabsTrigger>}
-            {practical.conclusion && <TabsTrigger value="conclusion">Conclusion</TabsTrigger>}
+            <TabsTrigger value="conclusion">Conclusion</TabsTrigger>
           </TabsList>
           
           <TabsContent value="description">
@@ -102,17 +103,9 @@ const CSkillPracticalDetails = () => {
             </div>
           </TabsContent>
           
-          {practical.output && (
-            <TabsContent value="output">
-              <OutputTab output={practical.output} />
-            </TabsContent>
-          )}
-          
-          {practical.conclusion && (
-            <TabsContent value="conclusion">
-              <ConclusionTab conclusion={practical.conclusion} />
-            </TabsContent>
-          )}
+          <TabsContent value="conclusion">
+            <ConclusionTab conclusion={practical.conclusion} />
+          </TabsContent>
         </Tabs>
       </div>
       
