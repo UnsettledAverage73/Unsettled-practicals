@@ -1,10 +1,10 @@
-
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Navbar from '@/components/Navbar';
 import { cSkillPracticals } from '@/data/cSkillPracticals';
 import Footer from '@/components/Footer';
+import GameComponent from '@/components/games/GameComponent';
 
 // Import the tab content components
 import DescriptionTab from '@/components/practical-tabs/DescriptionTab';
@@ -34,6 +34,10 @@ const CSkillPracticalDetails = () => {
     );
   }
   
+  const handleGameComplete = (score: number) => {
+    toast.success(`Game completed with score: ${score}!`);
+  };
+  
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
@@ -51,6 +55,7 @@ const CSkillPracticalDetails = () => {
             {practical.theory && <TabsTrigger value="theory">Theory</TabsTrigger>}
             {practical.code && <TabsTrigger value="code">Code</TabsTrigger>}
             {practical.code && <TabsTrigger value="try">Try It</TabsTrigger>}
+            <TabsTrigger value="game">🎮 Game</TabsTrigger>
             {practical.output && <TabsTrigger value="output">Output</TabsTrigger>}
             {practical.conclusion && <TabsTrigger value="conclusion">Conclusion</TabsTrigger>}
           </TabsList>
@@ -84,6 +89,18 @@ const CSkillPracticalDetails = () => {
               <TryItTab code={practical.code} />
             </TabsContent>
           )}
+          
+          <TabsContent value="game">
+            <div className="bg-white rounded-lg shadow-md p-6 animate-fade-in">
+              <h2 className="text-xl font-semibold mb-4">Interactive Learning Game</h2>
+              <GameComponent
+                gameType="coding"
+                practicalId={practical.id}
+                practicalTitle={practical.title}
+                onComplete={handleGameComplete}
+              />
+            </div>
+          </TabsContent>
           
           {practical.output && (
             <TabsContent value="output">

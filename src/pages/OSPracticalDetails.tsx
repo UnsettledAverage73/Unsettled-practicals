@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { osPracticals } from '@/data/osPracticals';
@@ -9,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChevronLeft, BookmarkIcon, BookmarkCheck, Code, Play } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import { toast } from '@/components/ui/sonner';
+import GameComponent from '@/components/games/GameComponent';
 
 const OSPracticalDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -49,6 +49,10 @@ const OSPracticalDetails = () => {
     toast.info('Online compiler feature coming soon!');
   };
 
+  const handleGameComplete = (score: number) => {
+    toast.success(`Game completed with score: ${score}!`);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -82,11 +86,12 @@ const OSPracticalDetails = () => {
         </div>
         
         <Tabs defaultValue="aim" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-6 mb-6">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-7 mb-6">
             <TabsTrigger value="aim">🎯 Aim</TabsTrigger>
             <TabsTrigger value="facilities">🛠️ Facilities</TabsTrigger>
             <TabsTrigger value="theory">📚 Theory</TabsTrigger>
             {practical.code && <TabsTrigger value="code">💻 Code</TabsTrigger>}
+            <TabsTrigger value="game">🎮 Game</TabsTrigger>
             <TabsTrigger value="conclusion">📝 Conclusion</TabsTrigger>
             <TabsTrigger value="viva">🎤 Viva</TabsTrigger>
           </TabsList>
@@ -150,6 +155,18 @@ const OSPracticalDetails = () => {
                 </CardContent>
               </TabsContent>
             )}
+            
+            <TabsContent value="game" className="mt-0">
+              <CardContent className="p-6 animate-fade-in">
+                <h2 className="text-2xl font-semibold mb-4">Interactive Learning Game</h2>
+                <GameComponent
+                  gameType="simulation"
+                  practicalId={practical.id}
+                  practicalTitle={practical.title}
+                  onComplete={handleGameComplete}
+                />
+              </CardContent>
+            </TabsContent>
             
             <TabsContent value="conclusion" className="mt-0">
               <CardContent className="p-6 animate-fade-in">

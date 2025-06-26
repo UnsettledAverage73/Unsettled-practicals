@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { dataStructurePracticals } from '@/data/dataStructurePracticals';
@@ -10,6 +9,7 @@ import { ChevronLeft, BookmarkIcon, BookmarkCheck } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import { cn } from '@/lib/utils';
 import { toast } from '@/components/ui/sonner';
+import GameComponent from '@/components/games/GameComponent';
 
 const PracticalDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -46,6 +46,10 @@ const PracticalDetails = () => {
     toast.success(isBookmarked ? 'Removed from bookmarks' : 'Added to bookmarks');
   };
 
+  const handleGameComplete = (score: number) => {
+    toast.success(`Game completed with score: ${score}!`);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -79,11 +83,12 @@ const PracticalDetails = () => {
         </div>
         
         <Tabs defaultValue="code" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 mb-6">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-6 mb-6">
             <TabsTrigger value="code">💻 Code</TabsTrigger>
             <TabsTrigger value="explanation">🧠 Explanation</TabsTrigger>
             <TabsTrigger value="advantages">✅ Advantages</TabsTrigger>
             <TabsTrigger value="applications">📌 Applications</TabsTrigger>
+            <TabsTrigger value="game">🎮 Game</TabsTrigger>
             <TabsTrigger value="viva">🎤 Viva</TabsTrigger>
           </TabsList>
           
@@ -165,6 +170,18 @@ const PracticalDetails = () => {
                     </p>
                   </div>
                 )}
+              </CardContent>
+            </TabsContent>
+            
+            <TabsContent value="game" className="mt-0">
+              <CardContent className="p-6 animate-fade-in">
+                <h2 className="text-2xl font-semibold mb-4">Interactive Learning Game</h2>
+                <GameComponent
+                  gameType="memory"
+                  practicalId={practical.id}
+                  practicalTitle={practical.title}
+                  onComplete={handleGameComplete}
+                />
               </CardContent>
             </TabsContent>
             
