@@ -1,11 +1,13 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
+import LiveEditor from '@/components/LiveEditor';
 
 const Index = () => {
+  const [showLiveEditor, setShowLiveEditor] = useState(false);
+
   const subjects = [
     {
       name: "Data Structure",
@@ -42,10 +44,24 @@ const Index = () => {
           <h1 className="text-4xl font-bold text-primary mb-4">
             Code for Students Hub
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-600 mb-8">
             A comprehensive collection of practical implementations for computer science students.
             Easy access to code samples, explanations, and outputs.
           </p>
+          
+          {/* Live Editor Button */}
+          <div className="mb-8">
+            <Button 
+              onClick={() => setShowLiveEditor(true)}
+              size="lg"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            >
+              🚀 Open Live Code Editor
+            </Button>
+            <p className="text-sm text-gray-500 mt-2">
+              Try Python and HTML/CSS/JS with live preview
+            </p>
+          </div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
@@ -88,6 +104,11 @@ const Index = () => {
           ))}
         </div>
       </div>
+
+      {/* Live Editor Modal */}
+      {showLiveEditor && (
+        <LiveEditor onClose={() => setShowLiveEditor(false)} />
+      )}
     </div>
   );
 };

@@ -14,6 +14,7 @@ import CSkillPracticalDetails from '@/pages/CSkillPracticalDetails';
 import OSPracticalDetails from '@/pages/OSPracticalDetails';
 import DataNetworkingPracticalDetails from '@/pages/DataNetworkingPracticalDetails';
 import NotFound from '@/pages/NotFound';
+import LiveEditor from '@/components/LiveEditor';
 import './App.css';
 
 function App() {
@@ -35,6 +36,9 @@ function App() {
               <Route path="/c-skill/:id" element={<CSkillPracticalDetails />} />
               <Route path="/os/:id" element={<OSPracticalDetails />} />
               <Route path="/dcn/:id" element={<DataNetworkingPracticalDetails />} />
+              <Route path="/live-editor" element={<LiveEditor />} />
+              <Route path="/live-editor/web" element={<LiveEditor />} />
+              <Route path="/live-editor/python" element={<LiveEditor />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

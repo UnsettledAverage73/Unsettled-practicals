@@ -10,7 +10,8 @@ import {
   BookOpenIcon,
   CpuIcon,
   NetworkIcon,
-  FileCodeIcon
+  FileCodeIcon,
+  PlayIcon
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -36,6 +37,10 @@ const Navbar = () => {
   ];
 
   const isActive = (href: string) => location.pathname === href;
+
+  const openLiveEditor = () => {
+    window.open('/live-editor', '_blank');
+  };
 
   return (
     <nav className={cn(
@@ -91,10 +96,15 @@ const Navbar = () => {
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center space-x-3">
-            <Badge variant="secondary" className="bg-green-100 text-green-700 border-green-200">
-              <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+            <Button 
+              onClick={openLiveEditor}
+              variant="outline"
+              size="sm"
+              className="border-green-200 text-green-700 hover:bg-green-50"
+            >
+              <PlayIcon className="w-4 h-4 mr-2" />
               Live Editor
-            </Badge>
+            </Button>
             <Button 
               className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
               size="sm"
@@ -141,7 +151,19 @@ const Navbar = () => {
                 </Link>
               );
             })}
-            <div className="pt-4 border-t border-gray-200">
+            <div className="pt-4 border-t border-gray-200 space-y-2">
+              <Button 
+                onClick={() => {
+                  openLiveEditor();
+                  setIsOpen(false);
+                }}
+                variant="outline"
+                className="w-full border-green-200 text-green-700 hover:bg-green-50"
+                size="sm"
+              >
+                <PlayIcon className="w-4 h-4 mr-2" />
+                Live Editor
+              </Button>
               <Button 
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                 size="sm"
