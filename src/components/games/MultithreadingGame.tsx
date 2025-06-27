@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Threads, Play, Pause, RotateCcw, Cpu } from 'lucide-react';
+import { Cpu, Play, Pause, RotateCcw } from 'lucide-react';
 
 interface Thread {
   id: number;
@@ -150,7 +149,7 @@ const MultithreadingGame: React.FC<{ onComplete: (score: number) => void }> = ({
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader className="text-center">
           <CardTitle className="flex items-center justify-center gap-2">
-            <Threads className="text-orange-500" />
+            <Cpu className="text-orange-500" />
             Multithreading Mastery Complete!
           </CardTitle>
         </CardHeader>
@@ -176,7 +175,7 @@ const MultithreadingGame: React.FC<{ onComplete: (score: number) => void }> = ({
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Threads className="text-orange-500" />
+            <Cpu className="text-orange-500" />
             Challenge {currentChallenge + 1}: {challenges[currentChallenge].title}
           </CardTitle>
           <div className="w-full bg-gray-200 rounded-full h-2">
