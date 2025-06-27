@@ -11,4 +11,4 @@ export interface GameResult {
   completed: boolean;
 }
 
-export type GameType = 'memory' | 'simulation' | 'coding' | 'quiz';
+export type GameType = 'memory' | 'simulation' | 'coding' | 'quiz' | 'sorting' | 'array' | 'stack' | 'queue' | 'hanoi' | 'search' | 'recursion';

@@ -4,21 +4,54 @@ import { GameProps, GameType } from '@/types/games';
 import MemoryGame from './MemoryGame';
 import CommandSimulationGame from './CommandSimulationGame';
 import CodingChallengeGame from './CodingChallengeGame';
+import BubbleSortGame from './BubbleSortGame';
+import ArrayPuzzleGame from './ArrayPuzzleGame';
+import StackTowerGame from './StackTowerGame';
 
 interface GameComponentProps extends GameProps {
   gameType: GameType;
 }
 
-const GameComponent: React.FC<GameComponentProps> = ({ gameType, ...props }) => {
+const GameComponent: React.FC<GameComponentProps> = ({ gameType, practicalId, practicalTitle, onComplete }) => {
+  // Map practical IDs to specific games
+  const getGameForPractical = (id: number) => {
+    switch (id) {
+      case 1: // Bubble Sort
+        return <BubbleSortGame onComplete={onComplete} />;
+      case 2: // Array Operations
+        return <ArrayPuzzleGame onComplete={onComplete} />;
+      case 3: // Stack Operations
+        return <StackTowerGame onComplete={onComplete} />;
+      case 4: // Queue Operations - using memory game for now
+        return <MemoryGame practicalId={practicalId} practicalTitle={practicalTitle} onComplete={onComplete} />;
+      case 5: // Tower of Hanoi - using simulation game for now
+        return <CommandSimulationGame practicalId={practicalId} practicalTitle={practicalTitle} onComplete={onComplete} />;
+      case 6: // Binary Search - using memory game for now
+        return <MemoryGame practicalId={practicalId} practicalTitle={practicalTitle} onComplete={onComplete} />;
+      case 7: // Recursion - using memory game for now
+        return <MemoryGame practicalId={practicalId} practicalTitle={practicalTitle} onComplete={onComplete} />;
+      case 8: // Insertion Sort - using memory game for now
+        return <MemoryGame practicalId={practicalId} practicalTitle={practicalTitle} onComplete={onComplete} />;
+      default:
+        return <MemoryGame practicalId={practicalId} practicalTitle={practicalTitle} onComplete={onComplete} />;
+    }
+  };
+
+  // Use practical-specific games when available, otherwise fall back to generic games
+  if (practicalId && practicalId <= 8) {
+    return getGameForPractical(practicalId);
+  }
+
+  // Generic game selection based on gameType
   switch (gameType) {
     case 'memory':
-      return <MemoryGame {...props} />;
+      return <MemoryGame practicalId={practicalId} practicalTitle={practicalTitle} onComplete={onComplete} />;
     case 'simulation':
-      return <CommandSimulationGame {...props} />;
+      return <CommandSimulationGame practicalId={practicalId} practicalTitle={practicalTitle} onComplete={onComplete} />;
     case 'coding':
-      return <CodingChallengeGame {...props} />;
+      return <CodingChallengeGame practicalId={practicalId} practicalTitle={practicalTitle} onComplete={onComplete} />;
     default:
-      return <MemoryGame {...props} />;
+      return <MemoryGame practicalId={practicalId} practicalTitle={practicalTitle} onComplete={onComplete} />;
   }
 };
 
