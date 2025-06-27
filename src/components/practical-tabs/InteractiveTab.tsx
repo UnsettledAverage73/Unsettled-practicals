@@ -1,6 +1,6 @@
 
 import React from 'react';
-import InteractiveCodingPlayground from '@/components/InteractiveCodingPlayground';
+import EnhancedInteractiveCodingPlayground from '@/components/EnhancedInteractiveCodingPlayground';
 
 interface InteractiveTabProps {
   code: string;
@@ -10,8 +10,8 @@ interface InteractiveTabProps {
 
 const InteractiveTab: React.FC<InteractiveTabProps> = ({ code, title, testCases }) => {
   return (
-    <div className="animate-fade-in">
-      <InteractiveCodingPlayground
+    <div className="animate-slide-in-up">
+      <EnhancedInteractiveCodingPlayground
         initialCode={code}
         title={title}
         language="c"
