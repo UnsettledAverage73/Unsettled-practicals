@@ -1,11 +1,13 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { dataStructurePracticals } from '@/data/dataStructurePracticals';
+import { networking } from '@/data/networking';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
+import { notEqual } from 'assert';
 
-const DataStructure = () => {
+const DataNetworking = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -19,7 +21,7 @@ const DataStructure = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {dataStructurePracticals.map((practical, index) => (
+          {networking.map((practical, index) => (
             <Card 
               key={practical.id} 
               className="practical-transition border border-gray-200 hover:border-primary"
@@ -42,7 +44,7 @@ const DataStructure = () => {
               </CardContent>
               
               <CardFooter>
-                <Link to={`/data-structure/${practical.id}`} className="w-full">
+                <Link to={`/dcn/${practical.id}`} className="w-full">
                   <Button variant="outline" className="w-full border-primary text-primary hover:bg-primary hover:text-white transition-colors">
                     View Details
                   </Button>
@@ -56,4 +58,4 @@ const DataStructure = () => {
   );
 };
 
-export default DataStructure;
+export default DataNetworking;
