@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Sandpack } from '@codesandbox/sandpack-react';
 import { Button } from '@/components/ui/button';
@@ -351,7 +350,7 @@ if __name__ == "__main__":
   const [pythonOutput, setPythonOutput] = useState('');
   const [isRunningPython, setIsRunningPython] = useState(false);
   const [webConsole, setWebConsole] = useState<string[]>([]);
-  const iframeRef = useRef<HTMLIFrameRef>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const isStandalone = location.pathname.startsWith('/live-editor');
 
