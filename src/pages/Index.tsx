@@ -23,7 +23,7 @@ const Index = () => {
       name: "DCN (Data Communication and Networks)",
       path: "/dcn",
       description: "Network protocols, socket programming, and network configurations.",
-      status: "Coming Soon",
+      status: "Available",
     },
     {
       name: "C Skill",
