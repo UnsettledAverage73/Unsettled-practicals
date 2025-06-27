@@ -12,13 +12,20 @@ import HanoiTowerGame from './HanoiTowerGame';
 import BinarySearchGame from './BinarySearchGame';
 import RecursionBotGame from './RecursionBotGame';
 import InsertionSortCardGame from './InsertionSortCardGame';
+import OSGameComponent from './OSGameComponent';
 
 interface GameComponentProps extends GameProps {
   gameType: GameType;
+  subject?: 'datastructure' | 'os' | 'networking' | 'cskill';
 }
 
-const GameComponent: React.FC<GameComponentProps> = ({ gameType, practicalId, practicalTitle, onComplete }) => {
-  // Map practical IDs to specific games
+const GameComponent: React.FC<GameComponentProps> = ({ gameType, practicalId, practicalTitle, onComplete, subject }) => {
+  // Handle OS practicals with dedicated OS games
+  if (subject === 'os' || (practicalId && practicalId >= 1 && practicalId <= 8 && !subject)) {
+    return <OSGameComponent gameType={gameType} practicalId={practicalId} practicalTitle={practicalTitle} onComplete={onComplete} />;
+  }
+
+  // Map practical IDs to specific Data Structure games
   const getGameForPractical = (id: number) => {
     switch (id) {
       case 1: // Bubble Sort

@@ -164,6 +164,7 @@ const OSPracticalDetails = () => {
                   practicalId={practical.id}
                   practicalTitle={practical.title}
                   onComplete={handleGameComplete}
+                  subject="os"
                 />
               </CardContent>
             </TabsContent>
