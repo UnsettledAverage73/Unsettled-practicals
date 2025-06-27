@@ -7,6 +7,11 @@ import CodingChallengeGame from './CodingChallengeGame';
 import BubbleSortGame from './BubbleSortGame';
 import ArrayPuzzleGame from './ArrayPuzzleGame';
 import StackTowerGame from './StackTowerGame';
+import QueueBusGame from './QueueBusGame';
+import HanoiTowerGame from './HanoiTowerGame';
+import BinarySearchGame from './BinarySearchGame';
+import RecursionBotGame from './RecursionBotGame';
+import InsertionSortCardGame from './InsertionSortCardGame';
 
 interface GameComponentProps extends GameProps {
   gameType: GameType;
@@ -22,16 +27,16 @@ const GameComponent: React.FC<GameComponentProps> = ({ gameType, practicalId, pr
         return <ArrayPuzzleGame onComplete={onComplete} />;
       case 3: // Stack Operations
         return <StackTowerGame onComplete={onComplete} />;
-      case 4: // Queue Operations - using memory game for now
-        return <MemoryGame practicalId={practicalId} practicalTitle={practicalTitle} onComplete={onComplete} />;
-      case 5: // Tower of Hanoi - using simulation game for now
-        return <CommandSimulationGame practicalId={practicalId} practicalTitle={practicalTitle} onComplete={onComplete} />;
-      case 6: // Binary Search - using memory game for now
-        return <MemoryGame practicalId={practicalId} practicalTitle={practicalTitle} onComplete={onComplete} />;
-      case 7: // Recursion - using memory game for now
-        return <MemoryGame practicalId={practicalId} practicalTitle={practicalTitle} onComplete={onComplete} />;
-      case 8: // Insertion Sort - using memory game for now
-        return <MemoryGame practicalId={practicalId} practicalTitle={practicalTitle} onComplete={onComplete} />;
+      case 4: // Queue Operations
+        return <QueueBusGame onComplete={onComplete} />;
+      case 5: // Tower of Hanoi
+        return <HanoiTowerGame onComplete={onComplete} />;
+      case 6: // Binary Search
+        return <BinarySearchGame onComplete={onComplete} />;
+      case 7: // Recursion Multiplication
+        return <RecursionBotGame onComplete={onComplete} />;
+      case 8: // Insertion Sort
+        return <InsertionSortCardGame onComplete={onComplete} />;
       default:
         return <MemoryGame practicalId={practicalId} practicalTitle={practicalTitle} onComplete={onComplete} />;
     }
