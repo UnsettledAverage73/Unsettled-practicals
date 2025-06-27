@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Sandpack } from '@codesandbox/sandpack-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -253,6 +253,11 @@ function addRandomElement() {
 
   const [pythonOutput, setPythonOutput] = useState('');
   const [isRunningPython, setIsRunningPython] = useState(false);
+  const pyodideRef = useRef<any>(null);
+  const [pyodideLoading, setPyodideLoading] = useState(false);
+  const [pyodideError, setPyodideError] = useState<string | null>(null);
+  const [webConsole, setWebConsole] = useState<string[]>([]);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   // Check if this is a standalone page (accessed via URL)
   const isStandalone = location.pathname.startsWith('/live-editor');
@@ -280,68 +285,113 @@ function addRandomElement() {
     }
   };
 
-  // Python execution using Pyodide (simulated for now)
+  // Load Pyodide on first use
+  const loadPyodide = async () => {
+    if (pyodideRef.current) return pyodideRef.current;
+    setPyodideLoading(true);
+    setPyodideError(null);
+    try {
+      // @ts-ignore
+      const pyodideScript = document.createElement('script');
+      pyodideScript.src = 'https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js';
+      pyodideScript.async = true;
+      document.body.appendChild(pyodideScript);
+      await new Promise((resolve, reject) => {
+        pyodideScript.onload = resolve;
+        pyodideScript.onerror = reject;
+      });
+      // @ts-ignore
+      const pyodide = await window.loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.1/full/' });
+      pyodideRef.current = pyodide;
+      setPyodideLoading(false);
+      return pyodide;
+    } catch (err: any) {
+      setPyodideError('Failed to load Pyodide.');
+      setPyodideLoading(false);
+      throw err;
+    }
+  };
+
+  // Enhanced Python execution with pip install and better error handling
   const executePython = async () => {
     setIsRunningPython(true);
-    setPythonOutput('Running Python code...\n');
-
+    setPythonOutput('');
+    setPyodideError(null);
     try {
-      // Simulate Python execution with JavaScript
-      const output = await simulatePythonExecution(pythonCode);
-      setPythonOutput(output);
+      const pyodide = await loadPyodide();
+      let output = '';
+      // Redirect stdout/stderr
+      pyodide.setStdout({ batched: (s: string) => { output += s; } });
+      pyodide.setStderr({ batched: (s: string) => { output += s; } });
+      // Handle !pip install (micropip)
+      if (pythonCode.includes('!pip install')) {
+        const pipLines = pythonCode.split('\n').filter(l => l.trim().startsWith('!pip install'));
+        for (const pipLine of pipLines) {
+          const pkg = pipLine.replace('!pip install', '').trim();
+          output += `Installing ${pkg}...\n`;
+          await pyodide.loadPackage('micropip');
+          await pyodide.runPythonAsync(`import micropip\nawait micropip.install('${pkg}')`);
+          output += `${pkg} installed!\n`;
+        }
+      }
+      // Remove pip lines for actual code execution
+      const codeToRun = pythonCode.split('\n').filter(l => !l.trim().startsWith('!pip install')).join('\n');
+      await pyodide.runPythonAsync(codeToRun);
+      setPythonOutput(output || '');
       toast.success('Python code executed successfully!');
-    } catch (error) {
-      setPythonOutput(`Error: ${error instanceof Error ? error.message : String(error)}`);
+    } catch (error: any) {
+      setPythonOutput(error?.message || String(error));
+      setPyodideError(error?.traceback || 'Python execution error.');
       toast.error('Error executing Python code');
     } finally {
       setIsRunningPython(false);
     }
   };
 
-  const simulatePythonExecution = async (code: string): Promise<string> => {
-    // This is a simplified Python simulation
-    // In a real implementation, you'd use Pyodide or a Python WASM runtime
-    
-    let output = '';
-    const lines = code.split('\n');
-    
-    for (const line of lines) {
-      const trimmedLine = line.trim();
-      
-      if (trimmedLine.startsWith('print(')) {
-        // Extract print content
-        const content = trimmedLine.match(/print\(['"`]([^'"`]*)['"`]\)/);
-        if (content) {
-          output += content[1] + '\n';
-        }
-      } else if (trimmedLine.includes('=') && !trimmedLine.startsWith('#')) {
-        // Variable assignment
-        output += `Variable assigned: ${trimmedLine}\n`;
-      } else if (trimmedLine.startsWith('def ')) {
-        // Function definition
-        const funcName = trimmedLine.match(/def (\w+)/);
-        if (funcName) {
-          output += `Function defined: ${funcName[1]}\n`;
-        }
-      } else if (trimmedLine.startsWith('#')) {
-        // Comment - skip
-        continue;
-      } else if (trimmedLine && !trimmedLine.startsWith('if ') && !trimmedLine.startsWith('for ') && !trimmedLine.startsWith('while ')) {
-        // Other executable lines
-        output += `Executed: ${trimmedLine}\n`;
+  // Enhanced Web (HTML/CSS/JS) execution with console capture
+  const runWebCode = () => {
+    setWebConsole([]);
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+    const doc = iframe.contentDocument || iframe.contentWindow?.document;
+    if (!doc) return;
+    // Prepare the HTML with injected JS for console capture
+    const consoleScript = `
+      <script>
+        (function() {
+          const parent = window.parent;
+          function send(type, ...args) {
+            parent.postMessage({ type: 'web-console', logType: type, args }, '*');
+          }
+          ['log', 'error', 'warn', 'info'].forEach(fn => {
+            const orig = console[fn];
+            console[fn] = function(...args) {
+              send(fn, ...args);
+              orig.apply(console, args);
+            };
+          });
+          window.onerror = function(msg, url, line, col, err) {
+            send('error', msg + ' at ' + line + ':' + col);
+          };
+        })();
+      <\/script>
+    `;
+    const fullHtml = htmlCode.replace('</body>', `${consoleScript}</body>`);
+    doc.open();
+    doc.write(fullHtml);
+    doc.close();
+  };
+
+  // Listen for console messages from iframe
+  useEffect(() => {
+    function handleMsg(e: MessageEvent) {
+      if (e.data && e.data.type === 'web-console') {
+        setWebConsole(prev => [...prev, `[${e.data.logType}] ${e.data.args.join(' ')}`]);
       }
     }
-    
-    // Simulate some common Python operations
-    if (code.includes('factorial')) {
-      output += 'Factorial calculation completed\n';
-    }
-    if (code.includes('for x in')) {
-      output += 'List comprehension executed\n';
-    }
-    
-    return output || 'Code executed successfully!';
-  };
+    window.addEventListener('message', handleMsg);
+    return () => window.removeEventListener('message', handleMsg);
+  }, []);
 
   const resetPythonCode = () => {
     setPythonCode(`# Welcome to Python Live Editor!
@@ -616,36 +666,47 @@ function addRandomElement() {
             
             <TabsContent value="web" className="h-full mt-0">
               <div className="h-full">
-                <Sandpack
-                  template="vanilla"
-                  files={{
-                    'index.html': htmlCode,
-                    'styles.css': cssCode,
-                    'script.js': jsCode,
-                  }}
-                  options={{
-                    showConsole: true,
-                    showConsoleButton: true,
-                    editorHeight: isStandalone ? 'calc(100vh - 250px)' : 'calc(100vh - 200px)',
-                    showLineNumbers: true,
-                    showInlineErrors: true,
-                    showNavigator: true,
-                    showTabs: true,
-                  }}
-                  theme="light"
-                  customSetup={{
-                    dependencies: {},
-                  }}
-                />
-                <div className="p-4 bg-gray-50 border-t">
-                  <div className="flex justify-between items-center">
-                    <div className="text-sm text-gray-600">
-                      Edit HTML, CSS, and JavaScript in the tabs above to see live changes
+                <div className="flex flex-col lg:flex-row gap-4 h-full">
+                  <div className="flex-1 min-w-0">
+                    <div className="mb-2 font-medium">HTML/CSS/JS Editor</div>
+                    <Sandpack
+                      template="vanilla"
+                      files={{
+                        'index.html': htmlCode,
+                        'styles.css': cssCode,
+                        'script.js': jsCode,
+                      }}
+                      options={{
+                        showConsole: false,
+                        showConsoleButton: false,
+                        editorHeight: isStandalone ? 'calc(60vh)' : 'calc(40vh)',
+                        showLineNumbers: true,
+                        showInlineErrors: true,
+                        showNavigator: true,
+                        showTabs: true,
+                      }}
+                      theme="light"
+                      customSetup={{
+                        dependencies: {},
+                      }}
+                    />
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <Button onClick={runWebCode} variant="default" size="sm">Run Web Code</Button>
+                      <Button onClick={resetWebCode} variant="outline" size="sm">
+                        <RotateCcwIcon size={16} />
+                        <span className="ml-2">Reset Code</span>
+                      </Button>
                     </div>
-                    <Button onClick={resetWebCode} variant="outline" size="sm">
-                      <RotateCcwIcon size={16} />
-                      <span className="ml-2">Reset Code</span>
-                    </Button>
+                  </div>
+                  <div className="flex-1 min-w-0 flex flex-col">
+                    <div className="mb-2 font-medium">Web Preview</div>
+                    <div className="w-full flex-1 rounded mb-2 bg-white border overflow-hidden" style={{minHeight: '200px'}}>
+                      <iframe ref={iframeRef} className="w-full h-64 sm:h-80 md:h-96 border-0" title="Web Preview" />
+                    </div>
+                    <div className="mb-2 font-medium">Console Output</div>
+                    <div className="bg-black text-green-400 p-2 rounded font-mono text-xs h-24 sm:h-32 md:h-40 overflow-auto">
+                      {webConsole.length === 0 ? <span className="text-gray-500">Console output will appear here.</span> : webConsole.map((l, i) => <div key={i}>{l}</div>)}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -683,7 +744,7 @@ function addRandomElement() {
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold">Python Output</h3>
                   <div className={`bg-gray-900 text-green-400 p-4 rounded-lg overflow-auto font-mono text-sm ${isStandalone ? 'h-[calc(100vh-350px)]' : 'h-[calc(100vh-300px)]'}`}>
-                    <pre>{pythonOutput || 'Click "Run Python" to see output...'}</pre>
+                    <pre>{pyodideLoading ? 'Loading Python runtime...' : pyodideError ? pyodideError : (pythonOutput || 'Click "Run Python" to see output...')}</pre>
                   </div>
                   <div className="text-sm text-gray-600">
                     <p><strong>Note:</strong> This is a simulated Python environment. For full Python execution, consider using:</p>
